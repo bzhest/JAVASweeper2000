@@ -20,7 +20,13 @@ public class JavaSweeper extends JFrame {
     }
 
     private void initPanel() {
-        panel = new JPanel();
+        panel = new JPanel(){ // while panel creation anonim class is created
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(getImage("bomb"), 0, 0, this);
+            }
+        };
         panel.setPreferredSize(new Dimension(
                 CALS * IMAGE_SIZE, ROWS * IMAGE_SIZE));
         add(panel);
@@ -33,5 +39,11 @@ public class JavaSweeper extends JFrame {
         setLocationRelativeTo(null);// frame will be open in center
         setResizable(false);
         setVisible(true);
+    }
+
+    private Image getImage(String name){
+        String fileName = "img/" + name + ".png";
+        ImageIcon icon = new ImageIcon(getClass().getResource(fileName));
+        return icon.getImage();
     }
 }
