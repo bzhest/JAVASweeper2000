@@ -20,6 +20,8 @@ class Matrix {
     void set(Coord coord, Box box) {
         if (Ranges.inRange(coord)) {
             matrix[coord.x][coord.y] = box;
+        }else{
+            throw new ArrayIndexOutOfBoundsException("coord x: " + coord.x + " coord.y: " + coord.y + " are out of matrix range: " + Ranges.getSize());
         }
     }
 }
