@@ -6,11 +6,13 @@ import java.awt.event.MouseEvent;
 import sweeper.Box;
 import sweeper.Coord;
 import sweeper.Game;
+import sweeper.GameState;
 import sweeper.Ranges;
 
 public class JavaSweeper extends JFrame {
 
     private JPanel panel;
+    private JLabel label;
     private Game game;
     private final int COLS = 9;
     private final int ROWS = 9;
@@ -26,9 +28,15 @@ public class JavaSweeper extends JFrame {
         game = new Game(COLS, ROWS, BOMBS);
         game.start();
         setImages();
+        initLabel();
         initPanel();
         initFrame();
         setIconImage(getImage("icon"));
+    }
+
+    private void initLabel() {
+        label = new JLabel("Welcome!");
+        add(label, BorderLayout.SOUTH);
     }
 
     private void initPanel() {
@@ -46,13 +54,17 @@ public class JavaSweeper extends JFrame {
             public void mousePressed(MouseEvent e) {
                 int x = e.getX() / IMAGE_SIZE;
                 int y = e.getY() / IMAGE_SIZE;
-                Coord coord = new Coord(x,y);// coordinates of place that was clicked
-                if(e.getButton() == MouseEvent.BUTTON1){
+                Coord coord = new Coord(x, y);// coordinates of place that was clicked
+                if (e.getButton() == MouseEvent.BUTTON1) {
                     game.pressLeftButton(coord);
                 }
-                if(e.getButton() == MouseEvent.BUTTON3){
+                if (e.getButton() == MouseEvent.BUTTON3) {
                     game.pressRightButton(coord);
                 }
+                if (e.getButton() == MouseEvent.BUTTON2) {
+                    game.start();
+                }
+                label.setText(getMessage());
                 panel.repaint();
             }
         });
@@ -63,13 +75,22 @@ public class JavaSweeper extends JFrame {
         add(panel);
     }
 
+    private String getMessage() {
+        switch (game.getGameState()){
+            case PLAYED: return "Think twice!";
+            case BOMBED: return "You lose!";
+            case WINNER: return "You win";
+            default: return "Welcome";
+        }
+    }
+
     private void initFrame() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//after 'x' will be clicked - program will be closed
         setTitle("Java Sweeper");
-        setLocationRelativeTo(null);// frame will be open in center
         setResizable(false);
         setVisible(true);
         pack(); //set up min frame size to show all needed components
+        setLocationRelativeTo(null);// frame will be open in center
     }
 
     private Image getImage(String name) {

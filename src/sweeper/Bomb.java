@@ -44,4 +44,8 @@ class Bomb {
             totalBombs = maxBombsCount;
         }
     }
+
+    public int getTotalBombs() {
+        return totalBombs;
+    }
 }
